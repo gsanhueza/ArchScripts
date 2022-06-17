@@ -20,7 +20,7 @@ YAYPATH="${BASEDIR}/${YAYFILE}"
 
 # Use this for OFFLINE installation (ArchISOMaker)
 CACHEDIR="/root/pkg"
-PACMANPATH="/root/pacman_custom.conf"
+PACMANPATH="${BASEDIR}/pacman_custom.conf"
 
 # Use this if for ONLINE installation
 #CACHEDIR="${MOUNTPOINT}/var/cache/pacman/pkg"
