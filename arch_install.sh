@@ -2,7 +2,7 @@
 
 SCRIPTFILE=${0##*/}
 MOUNTPOINT="/mnt"
-BASEDIR="."
+BASEDIR=$(readlink -f ${0%/*})
 
 PRINTERFILE="printer.sh"
 PKGFILE="packages.sh"
