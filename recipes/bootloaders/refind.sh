@@ -1,0 +1,1 @@
+RECIPE_PKGS="refind"

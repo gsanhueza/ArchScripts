@@ -2,7 +2,9 @@
 
 SCRIPTFILE=${0##*/}
 MOUNTPOINT="/mnt"
+
 BASEDIR=$(readlink -f ${0%/*})
+RECIPESDIR="${BASEDIR}/recipes"
 
 PRINTERFILE="printer.sh"
 PKGFILE="packages.sh"
@@ -32,58 +34,39 @@ source $PRINTERPATH
 source $ENVPATH
 source $PKGPATH
 
+select_base_packages()
+{
+    print_message "Selecting base packages..."
+
+    source "${RECIPESDIR}/base/minimal.sh"
+    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+
+    source "${RECIPESDIR}/base/utilities.sh"
+    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+}
+
 select_desktop_environment()
 {
-    # KDE vs GNOME vs i3 vs X11
     print_message "Selecting ${DESKTOP_ENV}..."
 
-    if [[ $DESKTOP_ENV == "KDE" ]]
-    then
-        export PACKAGES="$PACKAGES $KDE"
-    elif [[ $DESKTOP_ENV == "GNOME" ]]
-    then
-        export PACKAGES="$PACKAGES $GNOME"
-    elif [[ $DESKTOP_ENV == "i3" ]]
-    then
-        export PACKAGES="$PACKAGES $I3"
-    elif [[ $DESKTOP_ENV == "X11" ]]
-    then
-        export PACKAGES="$PACKAGES $X11"
-    fi
+    source "${RECIPESDIR}/desktops/${DESKTOP_ENV}.sh"
+    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
 }
 
 select_bootloader()
 {
-    # rEFInd vs GRUB
     print_message "Selecting ${BOOTLOADER}..."
 
-    if [[ $BOOTLOADER == "refind" ]]
-    then
-        export PACKAGES="$PACKAGES $REFIND"
-    elif [[ $BOOTLOADER == "grub" ]]
-    then
-        export PACKAGES="$PACKAGES $GRUB"
-    fi
+    source "${RECIPESDIR}/bootloaders/${BOOTLOADER}.sh"
+    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
 }
 
 select_video_drivers()
 {
-    # nVidia vs AMD vs VBox vs Intel
     print_message "Selecting ${XORG_DRIVERS} drivers..."
 
-    if [[ $XORG_DRIVERS == "nvidia" ]]
-    then
-        export PACKAGES="$PACKAGES $NVIDIA"
-    elif [[ $XORG_DRIVERS == "amd" ]]
-    then
-        export PACKAGES="$PACKAGES $AMD"
-    elif [[ $XORG_DRIVERS == "vbox" ]]
-    then
-        export PACKAGES="$PACKAGES $VBOX"
-    elif [[ $XORG_DRIVERS == "intel" ]]
-    then
-        export PACKAGES="$PACKAGES $INTEL"
-    fi
+    source "${RECIPESDIR}/video_drivers/${XORG_DRIVERS}.sh"
+    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
 }
 
 install_packages()
@@ -153,6 +136,7 @@ check_mounted_drive() {
 
 install_system()
 {
+    select_base_packages
     select_desktop_environment
     select_bootloader
     select_video_drivers
