@@ -7,13 +7,11 @@ BASEDIR=$(readlink -f ${0%/*})
 RECIPESDIR="${BASEDIR}/recipes"
 
 PRINTERFILE="printer.sh"
-PKGFILE="packages.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
 YAYFILE="yay_install.sh"
 
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
-PKGPATH="${BASEDIR}/${PKGFILE}"
 ENVPATH="${BASEDIR}/${ENVFILE}"
 CONFPATH="${BASEDIR}/${CONFFILE}"
 YAYPATH="${BASEDIR}/${YAYFILE}"
@@ -32,7 +30,6 @@ PACMANPATH="${BASEDIR}/pacman_custom.conf"
 
 source $PRINTERPATH
 source $ENVPATH
-source $PKGPATH
 
 select_base_packages()
 {
