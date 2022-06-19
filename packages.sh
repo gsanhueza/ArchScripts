@@ -10,3 +10,5 @@ do
     source ${recipe_file}
     ALL_PACKAGES="${ALL_PACKAGES} ${RECIPE_PKGS}"
 done
+
+export $ALL_PACKAGES
