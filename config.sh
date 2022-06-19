@@ -51,12 +51,10 @@ enable_desktop_manager()
 {
     print_message ">>> Enabling display manager <<<"
 
-    if [[ $DESKTOP_ENV == "KDE" ]]; then
+    if [[ $(pacman -Qsq sddm) ]]; then
         systemctl enable sddm.service
-    elif [[ $DESKTOP_ENV == "GNOME" ]]; then
+    elif [[ $(pacman -Qsq gdm) ]]; then
         systemctl enable gdm.service
-    elif [[ $DESKTOP_ENV == "i3" ]]; then
-        systemctl enable sddm.service
     fi
 }
 
@@ -115,9 +113,9 @@ install_bootloader()
 {
     print_message ">>> Installing $BOOTLOADER bootloader <<<"
 
-    if [ "$BOOTLOADER" == "grub" ]; then
+    if [[ $(pacman -Qsq grub) ]]; then
         install_grub
-    elif [ "$BOOTLOADER" == "refind" ]; then
+    elif [[ $(pacman -Qsq refind) ]]; then
         install_refind
     fi
 }
