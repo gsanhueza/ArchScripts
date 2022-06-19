@@ -22,7 +22,6 @@ Each script file plays a particular role:
 
 - `expand_cowsize.sh`: Expands live available space. Useful when installing packages in the live ISO.
 - `yay_install.sh`: Convenient script that allows you to install `yay` (an AUR helper) *after* installing your system.
-- `packages.sh`: A "database" of all available packages in the recipes. Used by ArchISOMaker.
 
 # Recipes
 
