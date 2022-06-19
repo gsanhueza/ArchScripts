@@ -76,7 +76,7 @@ setup_user_account()
     echo "$USERNAME:$PASSWORD" | chpasswd
 
     print_message ">>> Enabling sudo for $USERNAME <<<"
-    sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\ALL\)/\1/' /etc/sudoers
+    sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL:ALL)\s\ALL\)/\1/' /etc/sudoers
 
     print_message ">>> Moving AUR Helper instalation script to user folder <<<"
 
