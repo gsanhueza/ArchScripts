@@ -4,9 +4,12 @@
 # in case you absolutely need to install something heavier than 256 MB,
 # like a web browser (for emergency use).
 
-SIZE=4G
+BASEDIR=$(readlink -f ${0%/*})
 PRINTERFILE="printer.sh"
-source $PRINTERFILE
+PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
+SIZE=4G
+
+source $PRINTERPATH
 
 print_message ">> Expanding Live ISO space to $SIZE ... <<"
 mount -o remount,size=$SIZE /run/archiso/cowspace
