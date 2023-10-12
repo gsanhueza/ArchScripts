@@ -1,1 +1,1 @@
-RECIPE_PKGS="gnome gnome-tweak-tool"
+RECIPE_PKGS="gnome gnome-tweaks"
