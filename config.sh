@@ -92,21 +92,23 @@ install_grub()
 
 install_refind()
 {
-    # Bait refind-install into thinking that a refind install already exists,
-    # so it will "upgrade" (install) in desired location /boot/EFI/refind
-    # This is done to avoid moving Microsoft's original bootloader.
+    # If EFI partition is mounted on `/boot`, default initrd should be `initrd=/initramfs-linux.img`
+    # If EFI partition is mounted on `/efi`, default initrd should be `initrd=/boot/initramfs-linux.img`
+    BOOTPATH=""
+    if [[ $(findmnt /efi) ]]; then
+        BOOTPATH="/boot"
+    fi
 
-    # Comment the following two lines if you have an HP computer
-    # (suboptimal EFI implementation), or you don't mind moving
-    # the original bootloader.
-    mkdir -p /boot/EFI/refind
-    cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
+    ## Uncomment these lines to prevent moving Microsoft's original bootloader.
+    ## Might be useful if you have an HP/MSI laptop (EFI implementation too rigid).
+    # mkdir -p /boot/EFI/refind
+    # cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
 
     refind-install
     REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-    echo "\"Boot using default options\"     \"root=${REFIND_UUID} rw add_efi_memmap initrd=intel-ucode.img initrd=amd-ucode.img initrd=initramfs-linux.img" > /boot/refind_linux.conf
-    echo "\"Boot using fallback initramfs\"  \"root=${REFIND_UUID} rw add_efi_memmap initrd=intel-ucode.img initrd=amd-ucode.img initrd=initramfs-linux-fallback.img" >> /boot/refind_linux.conf
-    echo "\"Boot to terminal\"               \"root=${REFIND_UUID} rw add_efi_memmap initrd=intel-ucode.img initrd=amd-ucode.img initrd=initramfs-linux.img systemd.unit=multi-user.target" >> /boot/refind_linux.conf
+    echo "\"Boot using default options\"     \"root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img" > /boot/refind_linux.conf
+    echo "\"Boot using fallback initramfs\"  \"root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux-fallback.img" >> /boot/refind_linux.conf
+    echo "\"Boot to terminal\"               \"root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img systemd.unit=multi-user.target" >> /boot/refind_linux.conf
 }
 
 install_bootloader()
@@ -145,4 +147,3 @@ main()
 
 # Execute main
 main
-
