@@ -92,10 +92,10 @@ install_grub()
 
 install_refind()
 {
-    # If EFI partition is mounted on `/boot`, default initrd should be `initrd=/initramfs-linux.img`
-    # If EFI partition is mounted on `/efi`, default initrd should be `initrd=/boot/initramfs-linux.img`
+    # If EFI partition is mounted on `/boot`, initrd is `initrd=/initramfs-linux.img`
+    # If EFI partition is mounted on `/efi` or `/boot/efi`, initrd is `initrd=/boot/initramfs-linux.img`
     BOOTPATH=""
-    if [[ $(findmnt /efi) ]]; then
+    if [[ $(findmnt /efi) || $(findmnt /boot/efi)]]; then
         BOOTPATH="/boot"
     fi
 
