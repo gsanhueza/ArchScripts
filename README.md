@@ -33,7 +33,6 @@ Available recipes by default are:
 * KDE (Plasma)
 * GNOME (GNOME Shell)
 * i3 (Window manager)
-* X11 (Minimal Xorg)
 
 ### Bootloaders
 * rEFInd
