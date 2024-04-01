@@ -35,7 +35,8 @@ select_base_packages()
 {
     print_message "Selecting base packages..."
 
-    for recipe_file in $(find ${RECIPES_DIR}/base -name "*.sh")
+    PACKAGES=""
+    for recipe_file in $(find ${RECIPESDIR}/base -name "*.sh")
     do
         source ${recipe_file}
         export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
