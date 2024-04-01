@@ -35,11 +35,11 @@ select_base_packages()
 {
     print_message "Selecting base packages..."
 
-    source "${RECIPESDIR}/base/minimal.sh"
-    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-
-    source "${RECIPESDIR}/base/utilities.sh"
-    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    for recipe_file in $(find ${RECIPES_DIR}/base -name "*.sh")
+    do
+        source ${recipe_file}
+        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    done
 }
 
 select_desktop_environment()
