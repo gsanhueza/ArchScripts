@@ -47,7 +47,7 @@ enable_networking()
     systemctl enable systemd-resolved.service
 }
 
-enable_desktop_manager()
+enable_display_manager()
 {
     print_message ">>> Enabling display manager <<<"
 
@@ -57,7 +57,7 @@ enable_desktop_manager()
     systemctl list-unit-files ly.service &>/dev/null && systemctl enable ly.service && return
 
     # Failed to find a display manager
-    exit 1
+    print_warning ">>> Display manager not found, continuing... <<<"
 }
 
 setup_root_account()
@@ -121,7 +121,7 @@ install_bootloader()
     command -v refind-install &> /dev/null && install_refind && return
 
     # Failed to install the bootloader
-    exit 1
+    print_warning ">>> Display manager not found, continuing... <<<"
 }
 
 clean_up()
@@ -140,7 +140,7 @@ main()
     set_language &&
     set_hostname &&
     enable_networking &&
-    enable_desktop_manager &&
+    enable_display_manager &&
     setup_root_account &&
     setup_user_account &&
     install_bootloader &&
