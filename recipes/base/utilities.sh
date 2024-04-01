@@ -1,4 +1,4 @@
-ESSENTIAL="man-db man-pages pacman-contrib xorg-server"
+ESSENTIAL="man-db man-pages pacman-contrib"
 MICROCODE="intel-ucode amd-ucode"
 DEVELOPMENT="base-devel git"
 DISKMGM="e2fsprogs dosfstools ntfs-3g"
