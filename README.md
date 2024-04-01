@@ -1,10 +1,10 @@
 # ArchScripts
 
-Custom-built scripts for auto-installation of Arch Linux.
+Custom-built scripts for (mostly) non-interactive installation of Arch Linux.
 
 # Relevant information
 
-The installation script (`arch_install.sh`) uses settings from the `env.sh` file, so you are required to edit it *before* installing the system!
+The installation script (`install.sh`) uses settings from the `env.sh` file, so you are required to edit it *before* installing the system!
 
 # Script descriptions
 
@@ -12,7 +12,7 @@ Each script file plays a particular role:
 
 ## Required files
 
-- `arch_install.sh`: The main installation script.
+- `install.sh`: The main installation script.
 - `config.sh`: A configuration script that runs inside *chroot*, after installing the packages.
 - `env.sh`: The environment script that stores the installation/setup information.
 - `printer.sh`: A printer script, mostly used to print colored messages.
