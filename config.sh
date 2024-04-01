@@ -39,25 +39,25 @@ enable_networking()
 {
     print_message ">>> Enabling networking <<<"
 
-    if [[ $(pacman -Qsq networkmanager) ]]; then
-        systemctl enable NetworkManager.service
-    else
-        systemctl enable systemd-networkd.service
-        systemctl enable systemd-resolved.service
-    fi
+    # Enable NetworkManager if found
+    systemctl list-unit-files NetworkManager.service &>/dev/null && systemctl enable NetworkManager.service && return
+
+    # Enable systemd utilities otherwise
+    systemctl enable systemd-networkd.service
+    systemctl enable systemd-resolved.service
 }
 
 enable_desktop_manager()
 {
     print_message ">>> Enabling display manager <<<"
 
-    if [[ $(pacman -Qsq sddm) ]]; then
-        systemctl enable sddm.service
-    elif [[ $(pacman -Qsq gdm) ]]; then
-        systemctl enable gdm.service
-    elif [[ $(pacman -Qsq ly) ]]; then
-        systemctl enable ly.service
-    fi
+    # Try enabling known display managers
+    systemctl list-unit-files sddm.service &>/dev/null && systemctl enable sddm.service && return
+    systemctl list-unit-files gdm.service &>/dev/null && systemctl enable gdm.service && return
+    systemctl list-unit-files ly.service &>/dev/null && systemctl enable ly.service && return
+
+    # Failed to find a display manager
+    exit 1
 }
 
 setup_root_account()
@@ -96,10 +96,7 @@ install_refind()
 {
     # If EFI partition is mounted on `/boot`, initrd is `initrd=/initramfs-linux.img`
     # If EFI partition is mounted on `/efi` or `/boot/efi`, initrd is `initrd=/boot/initramfs-linux.img`
-    BOOTPATH=""
-    if [[ $(findmnt /efi) || $(findmnt /boot/efi) ]]; then
-        BOOTPATH="/boot"
-    fi
+    (findmnt /efi || findmnt /boot/efi) &> /dev/null && BOOTPATH="/boot" || BOOTPATH=""
 
     ## Uncomment these lines to prevent moving Microsoft's original bootloader.
     ## Might be useful if you have an HP/MSI laptop (EFI implementation too rigid).
@@ -119,11 +116,12 @@ install_bootloader()
 {
     print_message ">>> Installing $BOOTLOADER bootloader <<<"
 
-    if [[ $(pacman -Qsq grub) ]]; then
-        install_grub
-    elif [[ $(pacman -Qsq refind) ]]; then
-        install_refind
-    fi
+    # Try installing the bootloader
+    command -v grub &> /dev/null && install_grub && return
+    command -v refind-install &> /dev/null && install_refind && return
+
+    # Failed to install the bootloader
+    exit 1
 }
 
 clean_up()
