@@ -1,1 +1,1 @@
-RECIPE_PKGS="i3 picom dmenu pulseaudio-alsa sddm xterm"
+RECIPE_PKGS="i3 dmenu alacritty pulseaudio-alsa sddm"
