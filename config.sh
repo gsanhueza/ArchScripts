@@ -55,6 +55,8 @@ enable_desktop_manager()
         systemctl enable sddm.service
     elif [[ $(pacman -Qsq gdm) ]]; then
         systemctl enable gdm.service
+    elif [[ $(pacman -Qsq ly) ]]; then
+        systemctl enable ly.service
     fi
 }
 
