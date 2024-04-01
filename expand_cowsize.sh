@@ -7,7 +7,7 @@
 BASEDIR=$(readlink -f ${0%/*})
 PRINTERFILE="printer.sh"
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
-SIZE=4G
+SIZE=${1:-4}G
 
 source $PRINTERPATH
 
