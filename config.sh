@@ -95,7 +95,7 @@ install_refind()
     # If EFI partition is mounted on `/boot`, initrd is `initrd=/initramfs-linux.img`
     # If EFI partition is mounted on `/efi` or `/boot/efi`, initrd is `initrd=/boot/initramfs-linux.img`
     BOOTPATH=""
-    if [[ $(findmnt /efi) || $(findmnt /boot/efi)]]; then
+    if [[ $(findmnt /efi) || $(findmnt /boot/efi) ]]; then
         BOOTPATH="/boot"
     fi
 
@@ -106,9 +106,11 @@ install_refind()
 
     refind-install
     REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-    echo "\"Boot using default options\"     \"root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img" > /boot/refind_linux.conf
-    echo "\"Boot using fallback initramfs\"  \"root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux-fallback.img" >> /boot/refind_linux.conf
-    echo "\"Boot to terminal\"               \"root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img systemd.unit=multi-user.target" >> /boot/refind_linux.conf
+    cat <<-EOF > /boot/refind_linux.conf
+"Boot using default options"     "root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img"
+"Boot using fallback initramfs"  "root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux-fallback.img"
+"Boot to terminal"               "root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img systemd.unit=multi-user.target"
+EOF
 }
 
 install_bootloader()
