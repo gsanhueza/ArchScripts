@@ -117,7 +117,7 @@ install_bootloader()
     print_message ">>> Installing $BOOTLOADER bootloader <<<"
 
     # Try installing the bootloader
-    command -v grub &> /dev/null && install_grub && return
+    command -v grub-install &> /dev/null && install_grub && return
     command -v refind-install &> /dev/null && install_refind && return
 
     # Failed to install the bootloader
