@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
+BASEDIR=$(readlink -f ${0%/*})
+
 SCRIPTFILE=${0##*/}
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
 
-source $PRINTERFILE
-source $ENVFILE
+SCRIPTPATH="${BASEDIR}/${SCRIPTFILE}"
+PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
+ENVPATH="${BASEDIR}/${ENVFILE}"
+
+source $PRINTERPATH
+source $ENVPATH
 
 set_zoneinfo()
 {
@@ -128,9 +134,9 @@ clean_up()
 {
     print_success ">>> Ready! Cleaning up <<<"
 
-    rm $ENVFILE -vf
-    rm $PRINTERFILE -vf
-    rm $SCRIPTFILE -vf
+    rm $ENVPATH -vf
+    rm $PRINTERPATH -vf
+    rm $SCRIPTPATH -vf
 }
 
 main()
