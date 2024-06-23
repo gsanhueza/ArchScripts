@@ -146,7 +146,7 @@ install_system()
     configure_system
 }
 
-verify_installation()
+verify_cleanup()
 {
     [[ ! -f $MOUNTPOINT/root/$CONFFILE && ! -f $MOUNTPOINT/root/$ENVFILE && ! -f $MOUNTPOINT/root/$PRINTERFILE ]]
 }
@@ -161,7 +161,7 @@ main()
 
     # Install and verify
     install_system
-    verify_installation
+    verify_cleanup
 
     # Message at end
     if [[ $? == 0 ]]; then

@@ -4,8 +4,8 @@ SCRIPTFILE=${0##*/}
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
 
-source /root/$PRINTERFILE
-source /root/$ENVFILE
+source $PRINTERFILE
+source $ENVFILE
 
 set_zoneinfo()
 {
@@ -82,7 +82,7 @@ setup_user_account()
 
     print_message ">>> Moving AUR Helper instalation script to user folder <<<"
 
-    mv /root/yay_install.sh /home/$USERNAME/ -v
+    mv yay_install.sh /home/$USERNAME/ -v
     chown $USERNAME:$USERNAME /home/$USERNAME/yay_install.sh -v
 }
 
@@ -147,5 +147,7 @@ main()
     clean_up
 }
 
-# Execute main
-main
+# Execute main only if directly run
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main
+fi
