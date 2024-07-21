@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e -u
+
 SCRIPTFILE=${0##*/}
 MOUNTPOINT="/mnt"
 

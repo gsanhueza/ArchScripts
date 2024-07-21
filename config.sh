@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e -u
+
 BASEDIR=$(readlink -f ${0%/*})
 
 SCRIPTFILE=${0##*/}
@@ -141,15 +143,15 @@ clean_up()
 
 main()
 {
-    set_zoneinfo &&
-    enable_utc &&
-    set_language &&
-    set_hostname &&
-    enable_networking &&
-    enable_display_manager &&
-    setup_root_account &&
-    setup_user_account &&
-    install_bootloader &&
+    set_zoneinfo
+    enable_utc
+    set_language
+    set_hostname
+    enable_networking
+    enable_display_manager
+    setup_root_account
+    setup_user_account
+    install_bootloader
     clean_up
 }
 
