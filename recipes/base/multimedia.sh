@@ -1,1 +1,1 @@
-RECIPE_PKGS="gstreamer alsa-utils mpv"
+RECIPE_PKGS="gstreamer mpv"
