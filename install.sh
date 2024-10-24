@@ -47,26 +47,41 @@ select_base_packages()
 
 select_desktop_environment()
 {
-    print_message "Selecting ${DESKTOP_ENV}..."
+    local FILEPATH="${RECIPESDIR}/desktops/${DESKTOP_ENV}.sh"
 
-    source "${RECIPESDIR}/desktops/${DESKTOP_ENV}.sh"
-    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    if test -f $FILEPATH; then
+        print_message "Selecting ${DESKTOP_ENV}..."
+        source $FILEPATH
+        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    else
+        print_warning "Skipping desktop selection..."
+    fi
 }
 
 select_bootloader()
 {
-    print_message "Selecting ${BOOTLOADER}..."
+    local FILEPATH="${RECIPESDIR}/bootloaders/${BOOTLOADER}.sh"
 
-    source "${RECIPESDIR}/bootloaders/${BOOTLOADER}.sh"
-    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    if test -f $FILEPATH; then
+        print_message "Selecting ${BOOTLOADER}..."
+        source $FILEPATH
+        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    else
+        print_warning "Skipping bootloader selection..."
+    fi
 }
 
 select_video_drivers()
 {
-    print_message "Selecting ${XORG_DRIVERS} drivers..."
+    local FILEPATH="${RECIPESDIR}/video_drivers/${XORG_DRIVERS}.sh"
 
-    source "${RECIPESDIR}/video_drivers/${XORG_DRIVERS}.sh"
-    export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    if test -f $FILEPATH; then
+        print_message "Selecting ${XORG_DRIVERS} drivers..."
+        source $FILEPATH
+        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+    else
+        print_warning "Skipping video drivers selection..."
+    fi
 }
 
 install_packages()
