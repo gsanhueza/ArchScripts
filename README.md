@@ -31,14 +31,11 @@ Available recipes by default are:
 ### Desktop environments
 * KDE (Plasma)
 * GNOME (GNOME Shell)
-* i3 (Window manager)
 
 ### Bootloaders
 * rEFInd
 * GRUB
 
 ### Graphic drivers
-* nVidia
-* AMD
-* VirtualBox
-* Intel
+* Default (works for AMD/Intel, check `recipes/video_drivers/default.sh` for more information)
+* Nvidia (proprietary driver)

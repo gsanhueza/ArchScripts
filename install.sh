@@ -73,10 +73,10 @@ select_bootloader()
 
 select_video_drivers()
 {
-    local FILEPATH="${RECIPESDIR}/video_drivers/${XORG_DRIVERS}.sh"
+    local FILEPATH="${RECIPESDIR}/video_drivers/${VIDEO_DRIVERS}.sh"
 
     if test -f $FILEPATH; then
-        print_message "Selecting ${XORG_DRIVERS} drivers..."
+        print_message "Selecting ${VIDEO_DRIVERS} drivers..."
         source $FILEPATH
         export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
     else
@@ -105,7 +105,7 @@ copy_scripts()
 
 configure_system()
 {
-    print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... <<<"
+    print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
     arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
 }
 

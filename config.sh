@@ -62,7 +62,6 @@ enable_display_manager()
     # Try enabling known display managers
     systemctl list-unit-files sddm.service &>/dev/null && systemctl enable sddm.service && return
     systemctl list-unit-files gdm.service &>/dev/null && systemctl enable gdm.service && return
-    systemctl list-unit-files ly.service &>/dev/null && systemctl enable ly.service && return
 
     # Failed to find a display manager
     print_warning ">>> Display manager not found, continuing... <<<"
@@ -125,8 +124,8 @@ install_bootloader()
     print_message ">>> Installing $BOOTLOADER bootloader <<<"
 
     # Try installing the bootloader
-    command -v grub-install &> /dev/null && install_grub && return
     command -v refind-install &> /dev/null && install_refind && return
+    command -v grub-install &> /dev/null && install_grub && return
 
     # Failed to install the bootloader
     print_warning ">>> Display manager not found, continuing... <<<"
