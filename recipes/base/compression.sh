@@ -1,1 +1,1 @@
-RECIPE_PKGS="unrar p7zip"
+RECIPE_PKGS="unrar 7zip"
