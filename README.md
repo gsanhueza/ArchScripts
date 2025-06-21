@@ -13,6 +13,7 @@ Each script file plays a particular role:
 ## Required files
 
 - `install.sh`: The main installation script.
+- `setup.sh`: The script that defines the installation functions required to run.
 - `config.sh`: A configuration script that runs inside *chroot*, after installing the packages.
 - `common.sh`: A script that stores common constants and functions for the scripts.
 - `env.sh`: The environment script that stores the installation/setup information.

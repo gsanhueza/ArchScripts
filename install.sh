@@ -5,98 +5,19 @@ set -eu
 SCRIPTFILE=${0##*/}
 
 BASEDIR=$(readlink -f ${0%/*})
-COMMONFILE="common.sh"
-COMMONPATH="${BASEDIR}/${COMMONFILE}"
+SETUP_FILE="setup.sh"
+SETUP_PATH="${BASEDIR}/${SETUP_FILE}"
 
-source $COMMONPATH
+source $SETUP_PATH
 
-select_base_packages()
-{
-    print_message "Selecting base packages..."
-
-    PACKAGES=""
-    for recipe_file in $(find ${RECIPESDIR}/base -name "*.sh")
-    do
-        source ${recipe_file}
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-    done
-}
-
-select_desktop_environment()
-{
-    local FILEPATH="${RECIPESDIR}/desktops/${DESKTOP_ENV}.sh"
-
-    if test -f $FILEPATH; then
-        print_message "Selecting ${DESKTOP_ENV}..."
-        source $FILEPATH
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+check_mounted_drive() {
+    if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
+        print_success "Drive mounted in $MOUNTPOINT."
     else
-        print_warning "Skipping desktop selection..."
+        print_failure "Drive is NOT MOUNTED!"
+        print_warning "Mount your drive in '$MOUNTPOINT' and re-run '$SCRIPTFILE' to install your system."
+        exit 1
     fi
-}
-
-select_bootloader()
-{
-    local FILEPATH="${RECIPESDIR}/bootloaders/${BOOTLOADER}.sh"
-
-    if test -f $FILEPATH; then
-        print_message "Selecting ${BOOTLOADER}..."
-        source $FILEPATH
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-    else
-        print_warning "Skipping bootloader selection..."
-    fi
-}
-
-select_video_drivers()
-{
-    local FILEPATH="${RECIPESDIR}/video_drivers/${VIDEO_DRIVERS}.sh"
-
-    if test -f $FILEPATH; then
-        print_message "Selecting ${VIDEO_DRIVERS} drivers..."
-        source $FILEPATH
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-    else
-        print_warning "Skipping video drivers selection..."
-    fi
-}
-
-install_packages()
-{
-    print_message "Installing packages..."
-    pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$CACHEDIR --needed
-}
-
-generate_fstab()
-{
-    genfstab -p -U $MOUNTPOINT > $MOUNTPOINT/etc/fstab
-}
-
-copy_configuration_scripts()
-{
-    local INSTALL_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${INSTALL_SCRIPTS_DIR}"
-    [ -e $INSTALL_SCRIPTS_TARGET_DIR ] || mkdir $INSTALL_SCRIPTS_TARGET_DIR -v
-
-    cp $COMMONPATH $INSTALL_SCRIPTS_TARGET_DIR -v
-    cp $PRINTERPATH $INSTALL_SCRIPTS_TARGET_DIR -v
-    cp $ENVPATH $INSTALL_SCRIPTS_TARGET_DIR -v
-    cp $CONFPATH $INSTALL_SCRIPTS_TARGET_DIR -v
-}
-
-copy_user_scripts() {
-    local USER_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${USER_SCRIPTS_DIR}"
-    [ -e $USER_SCRIPTS_TARGET_DIR ] || mkdir $USER_SCRIPTS_TARGET_DIR -v
-
-    cp ${BASEDIR}/user_scripts/* $USER_SCRIPTS_TARGET_DIR -v
-}
-
-configure_system()
-{
-    copy_configuration_scripts
-    copy_user_scripts
-
-    print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNTPOINT /bin/zsh -c "sh $INSTALL_SCRIPTS_DIR/$CONFFILE && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
 }
 
 prompt_environment()
@@ -129,25 +50,31 @@ prompt_environment()
     esac
 }
 
-check_mounted_drive() {
-    if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
-        print_success "Drive mounted in $MOUNTPOINT."
-    else
-        print_failure "Drive is NOT MOUNTED!"
-        print_warning "Mount your drive in '$MOUNTPOINT' and re-run '$SCRIPTFILE' to install your system."
-        exit 1
-    fi
+copy_configuration_scripts()
+{
+    local INSTALL_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${INSTALL_SCRIPTS_DIR}"
+    [ -e $INSTALL_SCRIPTS_TARGET_DIR ] || mkdir $INSTALL_SCRIPTS_TARGET_DIR -v
+
+    cp $COMMONPATH $INSTALL_SCRIPTS_TARGET_DIR -v
+    cp $PRINTERPATH $INSTALL_SCRIPTS_TARGET_DIR -v
+    cp $ENVPATH $INSTALL_SCRIPTS_TARGET_DIR -v
+    cp $CONFPATH $INSTALL_SCRIPTS_TARGET_DIR -v
 }
 
-install_system()
-{
-    select_base_packages
-    select_desktop_environment
-    select_bootloader
-    select_video_drivers
+copy_user_scripts() {
+    local USER_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${USER_SCRIPTS_DIR}"
+    [ -e $USER_SCRIPTS_TARGET_DIR ] || mkdir $USER_SCRIPTS_TARGET_DIR -v
 
-    install_packages
-    generate_fstab
+    cp ${BASEDIR}/user_scripts/* $USER_SCRIPTS_TARGET_DIR -v
+}
+
+configure_system()
+{
+    copy_configuration_scripts
+    copy_user_scripts
+
+    print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "sh $INSTALL_SCRIPTS_DIR/$CONFFILE && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
 }
 
 main()
