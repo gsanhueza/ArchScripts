@@ -10,4 +10,4 @@ KEYMAP="us"                     # Check /usr/share/kbd/keymaps/**/*.map.gz for m
 ZONEINFO="America/Santiago"     # Check /usr/share/zoneinfo/ for more options
 DESKTOP_ENV="kde"               # kde, gnome
 BOOTLOADER="refind"             # refind, grub
-VIDEO_DRIVERS="nvidia"          # default, nvidia
+VIDEO_DRIVERS="default"         # default, nvidia
