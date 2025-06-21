@@ -7,6 +7,7 @@ BASEDIR=$(readlink -f ${0%/*})
 SCRIPTFILE=${0##*/}
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
+YAYFILE="install_yay.sh"
 
 SCRIPTPATH="${BASEDIR}/${SCRIPTFILE}"
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
@@ -86,11 +87,13 @@ setup_user_account()
 
     print_message ">>> Enabling sudo for $USERNAME <<<"
     echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/01_allow_wheel
+}
 
+setup_user_scripts() {
     print_message ">>> Moving AUR Helper instalation script to user folder <<<"
 
-    mv yay_install.sh /home/$USERNAME/ -v
-    chown $USERNAME:$USERNAME /home/$USERNAME/yay_install.sh -v
+    mv $YAYFILE /home/$USERNAME/ -v
+    chown $USERNAME:$USERNAME /home/$USERNAME/$YAYFILE -v
 }
 
 install_grub()
@@ -141,6 +144,7 @@ main()
     enable_display_manager
     setup_root_account
     setup_user_account
+    setup_user_scripts
     install_bootloader
 
     print_success ">>> System configuration is ready! <<<"

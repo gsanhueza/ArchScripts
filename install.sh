@@ -11,7 +11,7 @@ RECIPESDIR="${BASEDIR}/recipes"
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
-YAYFILE="yay_install.sh"
+YAYFILE="install_yay.sh"
 
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
 ENVPATH="${BASEDIR}/${ENVFILE}"

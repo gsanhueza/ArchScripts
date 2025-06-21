@@ -20,7 +20,7 @@ Each script file plays a particular role:
 
 ## Optional files
 
-- `yay_install.sh`: Convenient script that allows you to install `yay` (an AUR helper) *after* installing your system.
+- `install_yay.sh`: Convenient script that allows you to install `yay` (an AUR helper) *after* installing your system.
 
 # Recipes
 
