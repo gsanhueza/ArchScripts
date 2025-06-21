@@ -9,11 +9,13 @@ SCRIPTSDIR="/root/scripts"
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
-YAYFILE="install_yay.sh"
 
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
 ENVPATH="${BASEDIR}/${ENVFILE}"
 CONFPATH="${BASEDIR}/${CONFFILE}"
+
+# User scripts
+YAYFILE="install_yay.sh"
 YAYPATH="${BASEDIR}/${YAYFILE}"
 
 ### Installation options
@@ -27,4 +29,4 @@ PACMANPATH="${BASEDIR}/pacman_custom.conf"
 
 ### Expose functions when sourcing this script file
 source $PRINTERPATH
-source $ENVFILE
+source $ENVPATH

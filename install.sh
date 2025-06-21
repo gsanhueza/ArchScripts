@@ -90,11 +90,10 @@ copy_user_scripts() {
 configure_system()
 {
     copy_configuration_scripts
+    copy_user_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
     arch-chroot $MOUNTPOINT /bin/zsh -c "sh $SCRIPTSDIR/$CONFFILE && rm $SCRIPTSDIR -rf"
-
-    copy_user_scripts
 }
 
 prompt_environment()
