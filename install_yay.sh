@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This script will install `yay` as your AUR helper.
+
 set -eu
 
 function test_git_availability() {
@@ -18,6 +20,12 @@ function install_yay() {
     makepkg --dir /tmp/yay-bin -sic --noconfirm
 }
 
-# This script will install `yay` as your AUR helper.
-test_git_availability || prompt_git_installation
-install_yay
+function main() {
+    test_git_availability || prompt_git_installation
+    install_yay
+}
+
+# Execute main only if directly run
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main $@
+fi
