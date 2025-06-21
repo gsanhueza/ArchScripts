@@ -4,21 +4,26 @@ Custom-built scripts for (mostly) non-interactive installation of Arch Linux.
 
 # Relevant information
 
-The installation script (`install.sh`) uses settings from the `env.sh` file, so you are required to edit it *before* installing the system!
+The installation script (`install.sh`) uses settings from the `install_scripts/env.sh` file, so you are required to edit it *before* installing the system!
 
 # Script descriptions
 
 Each script file plays a particular role:
 
-## Required files
+## Main files
 
 - `install.sh`: The main installation script.
 - `setup.sh`: The script that defines the installation functions required to run.
+- `pacman_custom.conf`: A pacman file that sets up a custom repository in `/root/pkg` in the live system.
+
+## Installation files
+
+These files are located in the `install_scripts` folder.
+
 - `config.sh`: A configuration script that runs inside *chroot*, after installing the packages.
 - `common.sh`: A script that stores common constants and functions for the scripts.
 - `env.sh`: The environment script that stores the installation/setup information.
 - `printer.sh`: A printer script, mostly used to print colored messages.
-- `pacman_custom.conf`: A pacman file that assumes a custom repository in `/root/pkg` when installing your system.
 
 ## Optional files
 
