@@ -3,7 +3,7 @@
 set -eu
 
 BASE_DIR=$(readlink -f ${0%/*})
-COMMON_PATH="${BASE_DIR}/common.sh"
+COMMON_PATH="${BASE_DIR}/install_scripts/common.sh"
 
 source $COMMON_PATH
 

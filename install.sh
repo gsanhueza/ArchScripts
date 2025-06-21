@@ -55,10 +55,7 @@ copy_configuration_scripts()
     local INSTALL_SCRIPTS_TARGET="${MOUNT_POINT}${INSTALL_SCRIPTS_DIR}"
     [ -e $INSTALL_SCRIPTS_TARGET ] || mkdir $INSTALL_SCRIPTS_TARGET -v
 
-    cp $COMMONPATH $INSTALL_SCRIPTS_TARGET -v
-    cp $PRINTER_PATH $INSTALL_SCRIPTS_TARGET -v
-    cp $ENV_PATH $INSTALL_SCRIPTS_TARGET -v
-    cp $CONFIG_PATH $INSTALL_SCRIPTS_TARGET -v
+    cp ${BASE_DIR}/install_scripts/* $INSTALL_SCRIPTS_TARGET -v
 }
 
 copy_user_scripts() {
@@ -74,7 +71,7 @@ configure_system()
     copy_user_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNT_POINT -c "sh $INSTALL_SCRIPTS_DIR/config.sh && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
+    arch-chroot $MOUNT_POINT /bin/zsh -c "sh $INSTALL_SCRIPTS_DIR/config.sh && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
 }
 
 main()

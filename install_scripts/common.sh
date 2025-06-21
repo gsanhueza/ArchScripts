@@ -2,15 +2,15 @@
 
 ### Directories
 BASE_DIR=$(readlink -f ${0%/*})
+THIS_DIR=$(dirname ${BASH_SOURCE[0]})
 
 RECIPES_DIR="${BASE_DIR}/recipes"
 INSTALL_SCRIPTS_DIR="/root/install_scripts"
 USER_SCRIPTS_DIR="/root/user_scripts"
 
 # Paths
-PRINTER_PATH="${BASE_DIR}/printer.sh"
-ENV_PATH="${BASE_DIR}/env.sh"
-CONFIG_PATH="${BASE_DIR}/config.sh"
+PRINTER_PATH="${THIS_DIR}/printer.sh"
+ENV_PATH="${THIS_DIR}/env.sh"
 
 ### Installation options
 MOUNT_POINT="/mnt"
