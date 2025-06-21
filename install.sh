@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e -u
+set -eu
 
 SCRIPTFILE=${0##*/}
 MOUNTPOINT="/mnt"
@@ -97,16 +97,18 @@ generate_fstab()
 
 copy_scripts()
 {
-    cp $ENVPATH $MOUNTPOINT/root -v
-    cp $CONFPATH $MOUNTPOINT/root -v
-    cp $PRINTERPATH $MOUNTPOINT/root -v
-    cp $YAYPATH $MOUNTPOINT/root -v
+    cp $ENVPATH $MOUNTPOINT/tmp -v
+    cp $CONFPATH $MOUNTPOINT/tmp -v
+    cp $PRINTERPATH $MOUNTPOINT/tmp -v
+    cp $YAYPATH $MOUNTPOINT/tmp -v
 }
 
 configure_system()
 {
+    copy_scripts
+
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "sh /tmp/$CONFFILE"
 }
 
 prompt_environment()
@@ -158,14 +160,6 @@ install_system()
 
     install_packages
     generate_fstab
-    copy_scripts
-
-    configure_system
-}
-
-verify_cleanup()
-{
-    [[ ! -f $MOUNTPOINT/root/$CONFFILE && ! -f $MOUNTPOINT/root/$ENVFILE && ! -f $MOUNTPOINT/root/$PRINTERFILE ]]
 }
 
 main()
@@ -176,9 +170,9 @@ main()
     # Prompt user to check environment file before installing
     prompt_environment
 
-    # Install and verify
+    # Install and configure
     install_system
-    verify_cleanup
+    configure_system
 
     # Message at end
     if [[ $? == 0 ]]; then

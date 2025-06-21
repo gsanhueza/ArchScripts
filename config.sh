@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e -u
+set -eu
 
 BASEDIR=$(readlink -f ${0%/*})
 
@@ -131,15 +131,6 @@ install_bootloader()
     print_warning ">>> Display manager not found, continuing... <<<"
 }
 
-clean_up()
-{
-    print_success ">>> Ready! Cleaning up <<<"
-
-    rm $ENVPATH -vf
-    rm $PRINTERPATH -vf
-    rm $SCRIPTPATH -vf
-}
-
 main()
 {
     set_zoneinfo
@@ -151,7 +142,8 @@ main()
     setup_root_account
     setup_user_account
     install_bootloader
-    clean_up
+
+    print_success ">>> System configuration is ready! <<<"
 }
 
 # Execute main only if directly run
