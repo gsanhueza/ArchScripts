@@ -2,7 +2,9 @@
 
 ### File paths
 BASEDIR=$(readlink -f ${0%/*})
+
 RECIPESDIR="${BASEDIR}/recipes"
+SCRIPTSDIR="/root/scripts"
 
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
@@ -23,6 +25,6 @@ PACMANPATH="${BASEDIR}/pacman_custom.conf"
 #CACHEDIR="${MOUNTPOINT}/var/cache/pacman/pkg"
 #PACMANPATH="/etc/pacman.conf"
 
-### Functions exposure
+### Expose functions when sourcing this script file
 source $PRINTERPATH
 source $ENVFILE

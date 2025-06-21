@@ -74,10 +74,13 @@ generate_fstab()
 
 copy_configuration_scripts()
 {
-    cp $COMMONPATH $MOUNTPOINT/root -v
-    cp $ENVPATH $MOUNTPOINT/root -v
-    cp $CONFPATH $MOUNTPOINT/root -v
-    cp $PRINTERPATH $MOUNTPOINT/root -v
+    local MNTSCRIPTSDIR="${MOUNTPOINT}${SCRIPTSDIR}"
+    mkdir $MNTSCRIPTSDIR -v
+
+    cp $COMMONPATH $MNTSCRIPTSDIR -v
+    cp $PRINTERPATH $MNTSCRIPTSDIR -v
+    cp $ENVPATH $MNTSCRIPTSDIR -v
+    cp $CONFPATH $MNTSCRIPTSDIR -v
 }
 
 copy_user_scripts() {
@@ -89,7 +92,7 @@ configure_system()
     copy_configuration_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $COMMONFILE $CONFFILE $ENVFILE $PRINTERFILE -f"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "sh $SCRIPTSDIR/$CONFFILE && rm $SCRIPTSDIR -rf"
 
     copy_user_scripts
 }
