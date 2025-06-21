@@ -82,12 +82,11 @@ setup_user_account()
 }
 
 setup_user_scripts() {
-    for file in $(ls -1 "${USER_SCRIPTS_DIR}")
-    do
-        print_message ">>> Moving ${file} instalation script to user folder <<<"
-        mv "${USER_SCRIPTS_DIR}/${file}" /home/$USERNAME/ -v
-        chown $USERNAME:$USERNAME /home/$USERNAME/$file -v
-    done
+    print_message ">>> Moving user scripts to user folder <<<"
+
+    chown $USERNAME:$USERNAME ${USER_SCRIPTS_DIR}/* -v
+    chmod u+x ${USER_SCRIPTS_DIR}/* -v
+    mv ${USER_SCRIPTS_DIR}/* /home/$USERNAME -v
 }
 
 install_grub()
