@@ -75,7 +75,7 @@ generate_fstab()
 copy_configuration_scripts()
 {
     local INSTALL_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${INSTALL_SCRIPTS_DIR}"
-    mkdir $INSTALL_SCRIPTS_TARGET_DIR -v
+    [ -e $INSTALL_SCRIPTS_TARGET_DIR ] || mkdir $INSTALL_SCRIPTS_TARGET_DIR -v
 
     cp $COMMONPATH $INSTALL_SCRIPTS_TARGET_DIR -v
     cp $PRINTERPATH $INSTALL_SCRIPTS_TARGET_DIR -v
@@ -85,7 +85,7 @@ copy_configuration_scripts()
 
 copy_user_scripts() {
     local USER_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${USER_SCRIPTS_DIR}"
-    mkdir $USER_SCRIPTS_TARGET_DIR -v
+    [ -e $USER_SCRIPTS_TARGET_DIR ] || mkdir $USER_SCRIPTS_TARGET_DIR -v
 
     cp ${BASEDIR}/user_scripts/* $USER_SCRIPTS_TARGET_DIR -v
 }
