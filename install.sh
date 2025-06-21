@@ -85,6 +85,7 @@ copy_configuration_scripts()
 
 copy_user_scripts() {
     cp $YAYPATH $MOUNTPOINT/root -v
+    cp $CHAOTICPATH $MOUNTPOINT/root -v
 }
 
 configure_system()

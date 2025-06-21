@@ -82,10 +82,17 @@ setup_user_account()
 }
 
 setup_user_scripts() {
+    # Yay
     print_message ">>> Moving AUR Helper instalation script to user folder <<<"
 
     mv $YAYFILE /home/$USERNAME/ -v
     chown $USERNAME:$USERNAME /home/$USERNAME/$YAYFILE -v
+
+    # Chaotic AUR
+    print_message ">>> Moving Chaotic AUR instalation script to user folder <<<"
+
+    mv $CHAOTICFILE /home/$USERNAME/ -v
+    chown $USERNAME:$USERNAME /home/$USERNAME/$CHAOTICFILE -v
 }
 
 install_grub()

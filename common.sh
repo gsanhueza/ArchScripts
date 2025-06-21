@@ -16,7 +16,10 @@ CONFPATH="${BASEDIR}/${CONFFILE}"
 
 # User scripts
 YAYFILE="install_yay.sh"
+CHAOTICFILE="install_chaotic_aur.sh"
+
 YAYPATH="${BASEDIR}/${YAYFILE}"
+CHAOTICPATH="${BASEDIR}/${CHAOTICFILE}"
 
 ### Installation options
 MOUNTPOINT="/mnt"
