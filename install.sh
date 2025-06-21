@@ -3,33 +3,8 @@
 set -eu
 
 SCRIPTFILE=${0##*/}
-MOUNTPOINT="/mnt"
 
-BASEDIR=$(readlink -f ${0%/*})
-RECIPESDIR="${BASEDIR}/recipes"
-
-PRINTERFILE="printer.sh"
-ENVFILE="env.sh"
-CONFFILE="config.sh"
-YAYFILE="install_yay.sh"
-
-PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
-ENVPATH="${BASEDIR}/${ENVFILE}"
-CONFPATH="${BASEDIR}/${CONFFILE}"
-YAYPATH="${BASEDIR}/${YAYFILE}"
-
-# --------------------------------------- #
-
-# Use this for OFFLINE installation (ArchISOMaker)
-CACHEDIR="/root/pkg"
-PACMANPATH="${BASEDIR}/pacman_custom.conf"
-
-# Use this if for ONLINE installation
-#CACHEDIR="${MOUNTPOINT}/var/cache/pacman/pkg"
-#PACMANPATH="/etc/pacman.conf"
-
-# --------------------------------------- #
-
+source constants.sh
 source $PRINTERPATH
 source $ENVPATH
 

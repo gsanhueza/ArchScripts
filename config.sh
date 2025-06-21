@@ -2,17 +2,7 @@
 
 set -eu
 
-BASEDIR=$(readlink -f ${0%/*})
-
-SCRIPTFILE=${0##*/}
-PRINTERFILE="printer.sh"
-ENVFILE="env.sh"
-YAYFILE="install_yay.sh"
-
-SCRIPTPATH="${BASEDIR}/${SCRIPTFILE}"
-PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
-ENVPATH="${BASEDIR}/${ENVFILE}"
-
+source constants.sh
 source $PRINTERPATH
 source $ENVPATH
 
