@@ -22,7 +22,7 @@ function append_chaotic_repository() {
 
 function prompt_finished() {
     echo "Installation is ready!"
-    echo "Make sure to run 'sudo pacman -Syu' before using the new repository"
+    echo "Make sure to run 'sudo pacman -Syu' before using the new repository."
 }
 
 function main() {

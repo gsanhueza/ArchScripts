@@ -85,8 +85,9 @@ copy_configuration_scripts()
 
 copy_user_scripts() {
     local USER_SCRIPTS_TARGET_DIR="${MOUNTPOINT}${USER_SCRIPTS_DIR}"
+    mkdir $USER_SCRIPTS_TARGET_DIR -v
 
-    cp "${BASEDIR}/user_scripts" $USER_SCRIPTS_TARGET_DIR -rv
+    cp ${BASEDIR}/user_scripts/* $USER_SCRIPTS_TARGET_DIR -v
 }
 
 configure_system()
