@@ -97,10 +97,10 @@ generate_fstab()
 
 copy_scripts()
 {
-    cp $ENVPATH $MOUNTPOINT/tmp -v
-    cp $CONFPATH $MOUNTPOINT/tmp -v
-    cp $PRINTERPATH $MOUNTPOINT/tmp -v
-    cp $YAYPATH $MOUNTPOINT/tmp -v
+    cp $ENVPATH $MOUNTPOINT/root -v
+    cp $CONFPATH $MOUNTPOINT/root -v
+    cp $PRINTERPATH $MOUNTPOINT/root -v
+    cp $YAYPATH $MOUNTPOINT/root -v
 }
 
 configure_system()
@@ -108,7 +108,7 @@ configure_system()
     copy_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNTPOINT /bin/zsh -c "sh /tmp/$CONFFILE"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE $PRINTERFILE -f"
 }
 
 prompt_environment()
