@@ -1,1 +1,1 @@
-RECIPE_PKGS="nvidia"
+RECIPE_PKGS="nvidia-open"
