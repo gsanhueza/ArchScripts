@@ -71,13 +71,17 @@ setup_root_account()
 setup_user_account()
 {
     print_message ">>> Creating $USERNAME account <<<"
-    useradd -m -G wheel -s $USERSHELL $USERNAME
+
+    if !(useradd -m -G wheel -s $USERSHELL $USERNAME); then
+        print_warning ">>> Skipping creation of already-existing user... <<<"
+        return
+    fi
 
     # This is insecure AF, don't use this if your machine is being monitored
     echo "$USERNAME:$PASSWORD" | chpasswd
 
     print_message ">>> Enabling sudo for $USERNAME <<<"
-    echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/01_allow_wheel
+    echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/10_allow_wheel
 }
 
 setup_user_scripts() {
