@@ -2,11 +2,10 @@
 
 set -eu
 
-BASEDIR=$(readlink -f ${0%/*})
-COMMONFILE="common.sh"
-COMMONPATH="${BASEDIR}/${COMMONFILE}"
+BASE_DIR=$(readlink -f ${0%/*})
+COMMON_PATH="${BASE_DIR}/common.sh"
 
-source $COMMONPATH
+source $COMMON_PATH
 
 set_zoneinfo()
 {

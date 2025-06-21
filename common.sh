@@ -1,31 +1,26 @@
 #!/usr/bin/env bash
 
 ### Directories
-BASEDIR=$(readlink -f ${0%/*})
+BASE_DIR=$(readlink -f ${0%/*})
 
-RECIPESDIR="${BASEDIR}/recipes"
+RECIPES_DIR="${BASE_DIR}/recipes"
 INSTALL_SCRIPTS_DIR="/root/install_scripts"
 USER_SCRIPTS_DIR="/root/user_scripts"
 
-# Files
-PRINTERFILE="printer.sh"
-ENVFILE="env.sh"
-CONFFILE="config.sh"
-
 # Paths
-PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
-ENVPATH="${BASEDIR}/${ENVFILE}"
-CONFPATH="${BASEDIR}/${CONFFILE}"
+PRINTER_PATH="${BASE_DIR}/printer.sh"
+ENV_PATH="${BASE_DIR}/env.sh"
+CONFIG_PATH="${BASE_DIR}/config.sh"
 
 ### Installation options
-MOUNTPOINT="/mnt"
-CACHEDIR="/root/pkg"
-PACMANPATH="${BASEDIR}/pacman_custom.conf"
+MOUNT_POINT="/mnt"
+CACHE_DIR="/root/pkg"
+PACMAN_PATH="${BASE_DIR}/pacman_custom.conf"
 
 # Use this for ONLINE installation
-#CACHEDIR="${MOUNTPOINT}/var/cache/pacman/pkg"
-#PACMANPATH="/etc/pacman.conf"
+#CACHE_DIR="${MOUNT_POINT}/var/cache/pacman/pkg"
+#PACMAN_PATH="/etc/pacman.conf"
 
 ### Expose functions when sourcing this script file
-source $PRINTERPATH
-source $ENVPATH
+source $PRINTER_PATH
+source $ENV_PATH
