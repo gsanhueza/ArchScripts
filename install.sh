@@ -84,8 +84,9 @@ copy_configuration_scripts()
 }
 
 copy_user_scripts() {
-    cp $YAYPATH $MOUNTPOINT/root -v
-    cp $CHAOTICPATH $MOUNTPOINT/root -v
+    local MNT_USER_SCRIPTS_DIR="${MOUNTPOINT}${USER_SCRIPTS_DIR}"
+
+    cp "${BASEDIR}/${USER_SCRIPTS_DIR}" $MNT_USER_SCRIPTS_DIR -rv
 }
 
 configure_system()
@@ -94,7 +95,7 @@ configure_system()
     copy_user_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNTPOINT /bin/zsh -c "sh $SCRIPTSDIR/$CONFFILE && rm $SCRIPTSDIR -rf"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "sh $INSTALL_SCRIPTS_DIR/$CONFFILE && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
 }
 
 prompt_environment()

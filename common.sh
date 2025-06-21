@@ -1,25 +1,21 @@
 #!/usr/bin/env bash
 
-### File paths
+### Directories
 BASEDIR=$(readlink -f ${0%/*})
 
 RECIPESDIR="${BASEDIR}/recipes"
-SCRIPTSDIR="/root/scripts"
+INSTALL_SCRIPTS_DIR="/root/scripts"
+USER_SCRIPTS_DIR="/root/user_scripts"
 
+# Files
 PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
 
+# Paths
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
 ENVPATH="${BASEDIR}/${ENVFILE}"
 CONFPATH="${BASEDIR}/${CONFFILE}"
-
-# User scripts
-YAYFILE="install_yay.sh"
-CHAOTICFILE="install_chaotic_aur.sh"
-
-YAYPATH="${BASEDIR}/${YAYFILE}"
-CHAOTICPATH="${BASEDIR}/${CHAOTICFILE}"
 
 ### Installation options
 MOUNTPOINT="/mnt"

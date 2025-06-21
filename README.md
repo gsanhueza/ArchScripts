@@ -21,6 +21,8 @@ Each script file plays a particular role:
 
 ## Optional files
 
+These optional files are located in the `user_scripts` folder.
+
 - `install_yay.sh`: Convenient script that allows you to install `yay` (an AUR helper) *after* installing your system.
 - `install_chaotic_aur.sh`: Convenient script that allows you to install the Chaotic AUR repository *after* installing your system.
 
