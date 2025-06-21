@@ -82,10 +82,10 @@ setup_user_account()
 }
 
 setup_user_scripts() {
-    for file in "${USER_SCRIPTS_DIR}/*"
+    for file in $(ls -1 "${USER_SCRIPTS_DIR}")
     do
         print_message ">>> Moving ${file} instalation script to user folder <<<"
-        mv $file /home/$USERNAME/ -v
+        mv "${USER_SCRIPTS_DIR}/${file}" /home/$USERNAME/ -v
         chown $USERNAME:$USERNAME /home/$USERNAME/$file -v
     done
 }

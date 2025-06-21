@@ -4,7 +4,7 @@
 BASEDIR=$(readlink -f ${0%/*})
 
 RECIPESDIR="${BASEDIR}/recipes"
-INSTALL_SCRIPTS_DIR="/root/scripts"
+INSTALL_SCRIPTS_DIR="/root/install_scripts"
 USER_SCRIPTS_DIR="/root/user_scripts"
 
 # Files
