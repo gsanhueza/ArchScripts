@@ -4,9 +4,11 @@ set -eu
 
 SCRIPTFILE=${0##*/}
 
-source constants.sh
-source $PRINTERPATH
-source $ENVPATH
+BASEDIR=$(readlink -f ${0%/*})
+COMMONFILE="common.sh"
+COMMONPATH="${BASEDIR}/${COMMONFILE}"
+
+source $COMMONPATH
 
 select_base_packages()
 {
@@ -70,20 +72,26 @@ generate_fstab()
     genfstab -p -U $MOUNTPOINT > $MOUNTPOINT/etc/fstab
 }
 
-copy_scripts()
+copy_configuration_scripts()
 {
+    cp $COMMONPATH $MOUNTPOINT/root -v
     cp $ENVPATH $MOUNTPOINT/root -v
     cp $CONFPATH $MOUNTPOINT/root -v
     cp $PRINTERPATH $MOUNTPOINT/root -v
+}
+
+copy_user_scripts() {
     cp $YAYPATH $MOUNTPOINT/root -v
 }
 
 configure_system()
 {
-    copy_scripts
+    copy_configuration_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE $PRINTERFILE -f"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $COMMONFILE $CONFFILE $ENVFILE $PRINTERFILE -f"
+
+    copy_user_scripts
 }
 
 prompt_environment()
@@ -158,5 +166,7 @@ main()
     fi
 }
 
-# Execute main
-main $@
+# Execute main only if directly run
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main $@
+fi

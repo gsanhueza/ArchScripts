@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-### Base options
-BASEDIR=$(readlink -f ${0%/*})
-
 ### File paths
+BASEDIR=$(readlink -f ${0%/*})
 RECIPESDIR="${BASEDIR}/recipes"
 
 PRINTERFILE="printer.sh"
@@ -24,3 +22,7 @@ PACMANPATH="${BASEDIR}/pacman_custom.conf"
 # Use this for ONLINE installation
 #CACHEDIR="${MOUNTPOINT}/var/cache/pacman/pkg"
 #PACMANPATH="/etc/pacman.conf"
+
+### Functions exposure
+source $PRINTERPATH
+source $ENVFILE

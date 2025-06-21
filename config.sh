@@ -2,9 +2,11 @@
 
 set -eu
 
-source constants.sh
-source $PRINTERPATH
-source $ENVPATH
+BASEDIR=$(readlink -f ${0%/*})
+COMMONFILE="common.sh"
+COMMONPATH="${BASEDIR}/${COMMONFILE}"
+
+source $COMMONPATH
 
 set_zoneinfo()
 {
