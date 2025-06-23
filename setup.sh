@@ -3,12 +3,9 @@
 set -eu
 
 SCRIPT_FILE=${0##*/}
-
 BASE_DIR=$(readlink -f ${0%/*})
-SETUP_FILE="setup.sh"
-SETUP_PATH="${BASE_DIR}/${SETUP_FILE}"
 
-source $SETUP_PATH
+source ${BASE_DIR}/install_scripts/install.sh
 
 check_mounted_drive() {
     if [[ $(findmnt -M "$MOUNT_POINT") ]]; then
