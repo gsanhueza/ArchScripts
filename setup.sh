@@ -2,85 +2,100 @@
 
 set -eu
 
+SCRIPT_FILE=${0##*/}
+
 BASE_DIR=$(readlink -f ${0%/*})
-COMMON_PATH="${BASE_DIR}/install_scripts/common.sh"
+SETUP_FILE="setup.sh"
+SETUP_PATH="${BASE_DIR}/${SETUP_FILE}"
 
-source $COMMON_PATH
+source $SETUP_PATH
 
-select_base_packages()
-{
-    print_message "Selecting base packages..."
-
-    PACKAGES=""
-    for recipe_file in $(find ${RECIPES_DIR}/base -name "*.sh")
-    do
-        source ${recipe_file}
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-    done
-}
-
-select_desktop_environment()
-{
-    local FILEPATH="${RECIPES_DIR}/desktops/${DESKTOP_ENV}.sh"
-
-    if test -f $FILEPATH; then
-        print_message "Selecting ${DESKTOP_ENV}..."
-        source $FILEPATH
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
+check_mounted_drive() {
+    if [[ $(findmnt -M "$MOUNT_POINT") ]]; then
+        print_success "Drive mounted in $MOUNT_POINT."
     else
-        print_warning "Skipping desktop selection..."
+        print_failure "Drive is NOT MOUNTED!"
+        print_warning "Mount your drive in '$MOUNT_POINT' and re-run '$SCRIPT_FILE' to install your system."
+        exit 1
     fi
 }
 
-select_bootloader()
+prompt_environment()
 {
-    local FILEPATH="${RECIPES_DIR}/bootloaders/${BOOTLOADER}.sh"
+    print_message "Your system will be installed using the data in '$ENV_PATH'"
+    print_warning "Make sure your data is correct before proceeding!"
+    echo ""
 
-    if test -f $FILEPATH; then
-        print_message "Selecting ${BOOTLOADER}..."
-        source $FILEPATH
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-    else
-        print_warning "Skipping bootloader selection..."
-    fi
+    print_trailing "Do you wish to edit '$ENV_PATH'? ((Y)es / (n)o / e(x)it: "
+    read ans
+
+    case $ans in
+        'n'|'N')
+            print_success "Ok, installing with settings retrieved from '$ENV_PATH'..."
+            sleep 1
+        ;;
+        'x'|'X')
+            print_failure "Aborting installation!"
+            exit 1
+        ;;
+        *)
+            $EDITOR $ENV_PATH
+            print_message "--------------------------------------------"
+            print_message "Press ENTER to continue, or Ctrl+C to abort."
+            print_message "--------------------------------------------"
+
+            read
+            source $ENV_PATH
+        ;;
+    esac
 }
 
-select_video_drivers()
+copy_configuration_scripts()
 {
-    local FILEPATH="${RECIPES_DIR}/video_drivers/${VIDEO_DRIVERS}.sh"
+    local INSTALL_SCRIPTS_TARGET="${MOUNT_POINT}${INSTALL_SCRIPTS_DIR}"
+    [ -e $INSTALL_SCRIPTS_TARGET ] || mkdir $INSTALL_SCRIPTS_TARGET -v
 
-    if test -f $FILEPATH; then
-        print_message "Selecting ${VIDEO_DRIVERS} drivers..."
-        source $FILEPATH
-        export PACKAGES="${PACKAGES} ${RECIPE_PKGS}"
-    else
-        print_warning "Skipping video drivers selection..."
-    fi
+    cp ${BASE_DIR}/install_scripts/* $INSTALL_SCRIPTS_TARGET -v
 }
 
-install_packages()
-{
-    print_message "Installing packages..."
-    pacstrap -C $PACMAN_PATH $MOUNT_POINT $PACKAGES --cachedir=$CACHE_DIR --needed
+copy_user_scripts() {
+    local USER_SCRIPTS_TARGET="${MOUNT_POINT}${USER_SCRIPTS_DIR}"
+    [ -e $USER_SCRIPTS_TARGET ] || mkdir $USER_SCRIPTS_TARGET -v
+
+    cp ${BASE_DIR}/user_scripts/* $USER_SCRIPTS_TARGET -v
 }
 
-generate_fstab()
+configure_system()
 {
-    genfstab -p -U $MOUNT_POINT > $MOUNT_POINT/etc/fstab
+    copy_configuration_scripts
+    copy_user_scripts
+
+    print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
+    arch-chroot $MOUNT_POINT /bin/zsh -c "sh $INSTALL_SCRIPTS_DIR/config.sh && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
 }
 
-install_system()
+main()
 {
-    select_base_packages
-    select_desktop_environment
-    select_bootloader
-    select_video_drivers
+    # Check pre-install state
+    check_mounted_drive
 
-    install_packages
-    generate_fstab
-}
+    # Prompt user to check environment file before installing
+    prompt_environment
 
-# Execute installation only if directly run
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    # Install and configure
     install_system
+    configure_system
+
+    # Message at end
+    if [[ $? == 0 ]]; then
+        print_success "Installation finished! You can reboot now."
+    else
+        print_failure "Installation failed! Check errors before trying again."
+        exit 1
+    fi
+}
+
+# Execute main only if directly run
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main $@
 fi
