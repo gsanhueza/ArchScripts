@@ -2,9 +2,7 @@
 
 set -eu
 
-SCRIPT_FILE=${0##*/}
 BASE_DIR=$(readlink -f ${0%/*})
-
 source ${BASE_DIR}/install_scripts/install.sh
 
 check_mounted_drive() {
@@ -12,7 +10,7 @@ check_mounted_drive() {
         print_success "Drive mounted in $MOUNT_POINT."
     else
         print_failure "Drive is NOT MOUNTED!"
-        print_warning "Mount your drive in '$MOUNT_POINT' and re-run '$SCRIPT_FILE' to install your system."
+        print_warning "Mount your drive in '$MOUNT_POINT' and re-run this script to install your system."
         exit 1
     fi
 }
