@@ -60,8 +60,13 @@ select_video_drivers()
 
 install_packages()
 {
+    local PACMAN_CONF=$PACMAN_PATH
+    if test -f $PACMAN_TMP; then
+        PACMAN_CONF=$PACMAN_TMP
+    fi
+
     print_message "Installing packages..."
-    pacstrap -C $PACMAN_TMP $MOUNT_POINT $PACKAGES --cachedir=$CACHE_DIR --needed
+    pacstrap -C $PACMAN_CONF $MOUNT_POINT $PACKAGES --cachedir=$CACHE_DIR --needed
 }
 
 generate_fstab()
