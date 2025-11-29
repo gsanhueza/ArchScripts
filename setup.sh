@@ -81,7 +81,13 @@ configure_system()
     copy_user_scripts
 
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $VIDEO_DRIVERS... <<<"
-    arch-chroot $MOUNT_POINT /bin/zsh -c "sh $INSTALL_SCRIPTS_DIR/config.sh && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
+
+    local MNTSHELL="/bin/bash"
+    if test -f "${MOUNT_POINT}${USERSHELL}"; then
+        MNTSHELL=$USERSHELL
+    fi
+
+    arch-chroot $MOUNT_POINT $MNTSHELL -c "sh $INSTALL_SCRIPTS_DIR/config.sh && rm $INSTALL_SCRIPTS_DIR $USER_SCRIPTS_DIR -rf"
 }
 
 main()

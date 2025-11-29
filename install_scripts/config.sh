@@ -62,7 +62,9 @@ enable_display_manager()
 setup_root_account()
 {
     print_message ">>> Setting root account <<<"
-    chsh -s $USERSHELL
+    if !(chsh -s $USERSHELL); then
+        print_warning ">>> Shell not found, skipping shell change... <<<"
+    fi
 
     # This is insecure AF, don't use this if your machine is being monitored
     echo "root:$PASSWORD" | chpasswd
@@ -81,7 +83,12 @@ setup_user_account()
     echo "$USERNAME:$PASSWORD" | chpasswd
 
     print_message ">>> Enabling sudo for $USERNAME <<<"
-    echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/10_allow_wheel
+    if !(test -d /etc/sudoers.d); then
+        print_warning ">>> No sudoers.d directory found, skipping sudo for $USERNAME... <<<"
+        return
+    fi
+
+    echo '%wheel ALL=(ALL:ALL) ALL' | tee /etc/sudoers.d/10_allow_wheel
 }
 
 setup_user_scripts() {
