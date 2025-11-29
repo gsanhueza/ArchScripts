@@ -6,30 +6,21 @@ BASE_DIR=$(readlink -f ${0%/*})
 source ${BASE_DIR}/install_scripts/install.sh
 
 setup_pacman_custom() {
-    [[ -e "${PACMAN_PATH}.bak" ]] || cp ${PACMAN_PATH} "${PACMAN_PATH}.bak" -v
+    cp ${PACMAN_PATH} ${PACMAN_TMP} -v
 
-    sed -i "s|^#CacheDir.*|CacheDir    = ${CACHE_DIR}|g" ${PACMAN_PATH}
-    sed -i "s|^#Color|Color|g" ${PACMAN_PATH}
-    sed -i "s|^DownloadUser|\#DownloadUser|g" ${PACMAN_PATH}
+    sed -i "s|^#CacheDir.*|CacheDir    = ${CACHE_DIR}|g" ${PACMAN_TMP}
+    sed -i "s|^#Color|Color|g" ${PACMAN_TMP}
+    sed -i "s|^DownloadUser|\#DownloadUser|g" ${PACMAN_TMP}
 
-    sed -i 's|^\[core\]|#&|g' ${PACMAN_PATH}
-    sed -i 's|^\[extra\]|#&|g' ${PACMAN_PATH}
-    sed -i 's|^Include|\#Include|g' ${PACMAN_PATH}
+    sed -i 's|^\[core\]|#&|g' ${PACMAN_TMP}
+    sed -i 's|^\[extra\]|#&|g' ${PACMAN_TMP}
+    sed -i 's|^Include|\#Include|g' ${PACMAN_TMP}
 
-    sed -i 's|^#\[custom\]|\[custom\]|g' ${PACMAN_PATH}
-    sed -i 's|^#SigLevel|SigLevel|g' ${PACMAN_PATH}
-    sed -i "s|^#Server = file:\/\/\/home\/custompkgs|Server = file:\/\/${CACHE_DIR}|g" ${PACMAN_PATH}
+    sed -i 's|^#\[custom\]|\[custom\]|g' ${PACMAN_TMP}
+    sed -i 's|^#SigLevel|SigLevel|g' ${PACMAN_TMP}
+    sed -i "s|^#Server = file:\/\/\/home\/custompkgs|Server = file:\/\/${CACHE_DIR}|g" ${PACMAN_TMP}
 
     print_message "Pacman custom configuration setup completed."
-}
-
-restore_original_pacman() {
-    [[ -e "${PACMAN_PATH}.bak" ]] || print_warning "No backup of original pacman configuration found." && return
-
-    cp ${PACMAN_PATH} ${PACMAN_PATH}.old -v
-    cp ${PACMAN_PATH}.bak ${PACMAN_PATH} -v
-
-    print_message "Original pacman configuration restored."
 }
 
 check_mounted_drive() {
@@ -111,9 +102,6 @@ main()
     # Install and configure
     install_system
     configure_system
-
-    # Restore original pacman configuration
-    restore_original_pacman
 
     # Message at end
     if [[ $? == 0 ]]; then

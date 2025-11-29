@@ -16,6 +16,7 @@ ENV_PATH="${THIS_DIR}/env.sh"
 MOUNT_POINT="/mnt"
 CACHE_DIR="/root/pkg"
 PACMAN_PATH="/etc/pacman.conf"
+PACMAN_TMP="/tmp/pacman.conf"
 
 ### Expose functions when sourcing this script file
 source $PRINTER_PATH
