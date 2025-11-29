@@ -127,7 +127,7 @@ install_bootloader()
     command -v grub-install &> /dev/null && install_grub && return
 
     # Failed to install the bootloader
-    print_warning ">>> Display manager not found, continuing... <<<"
+    print_warning ">>> Bootloader not found, continuing... <<<"
 }
 
 main()
