@@ -71,7 +71,7 @@ install_packages()
 
 generate_fstab()
 {
-    genfstab -p -U $MOUNT_POINT > $MOUNT_POINT/etc/fstab
+    genfstab -p -U $MOUNT_POINT | tee $MOUNT_POINT/etc/fstab
 }
 
 install_system()

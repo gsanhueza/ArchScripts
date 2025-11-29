@@ -111,5 +111,7 @@ main()
 
 # Execute main only if directly run
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    (( EUID == 0 )) || (print_failure 'This script must be run with root privileges' && exit 1)
+
     main $@
 fi
