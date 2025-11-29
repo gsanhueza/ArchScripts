@@ -23,6 +23,13 @@ setup_pacman_custom() {
     print_message "Pacman custom configuration setup completed."
 }
 
+restore_original_pacman() {
+    cp ${PACMAN_PATH} ${PACMAN_PATH}.old -v
+    cp ${PACMAN_PATH}.bak ${PACMAN_PATH} -v
+
+    print_message "Original pacman configuration restored."
+}
+
 check_mounted_drive() {
     if [[ $(findmnt -M "$MOUNT_POINT") ]]; then
         print_success "Drive mounted in $MOUNT_POINT."
@@ -102,6 +109,9 @@ main()
     # Install and configure
     install_system
     configure_system
+
+    # Restore original pacman configuration
+    restore_original_pacman
 
     # Message at end
     if [[ $? == 0 ]]; then
