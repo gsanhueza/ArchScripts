@@ -10,10 +10,9 @@ The installation script (`setup.sh`) uses settings from the `install_scripts/env
 
 Each script file plays a particular role:
 
-## Main files
+## Main file
 
 - `setup.sh`: The main script that orchestrates the installation process, and the post-install configuration.
-- `pacman_custom.conf`: A pacman file that sets up a custom repository in `/root/pkg` in the live system.
 
 ## Installation files
 

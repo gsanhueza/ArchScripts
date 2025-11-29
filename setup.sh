@@ -5,6 +5,24 @@ set -eu
 BASE_DIR=$(readlink -f ${0%/*})
 source ${BASE_DIR}/install_scripts/install.sh
 
+setup_pacman_custom() {
+    [[ -e "${PACMAN_PATH}.bak" ]] || cp ${PACMAN_PATH} "${PACMAN_PATH}.bak" -v
+
+    sed -i "s|^#CacheDir.*|CacheDir    = ${CACHE_DIR}|g" ${PACMAN_PATH}
+    sed -i "s|^#Color|Color|g" ${PACMAN_PATH}
+    sed -i "s|^DownloadUser|\#DownloadUser|g" ${PACMAN_PATH}
+
+    sed -i 's|^\[core\]|#&|g' ${PACMAN_PATH}
+    sed -i 's|^\[extra\]|#&|g' ${PACMAN_PATH}
+    sed -i 's|^Include|\#Include|g' ${PACMAN_PATH}
+
+    sed -i 's|^#\[custom\]|\[custom\]|g' ${PACMAN_PATH}
+    sed -i 's|^#SigLevel|SigLevel|g' ${PACMAN_PATH}
+    sed -i "s|^#Server = file:\/\/\/home\/custompkgs|Server = file:\/\/${CACHE_DIR}|g" ${PACMAN_PATH}
+
+    print_message "Pacman custom configuration setup completed."
+}
+
 check_mounted_drive() {
     if [[ $(findmnt -M "$MOUNT_POINT") ]]; then
         print_success "Drive mounted in $MOUNT_POINT."
@@ -76,6 +94,10 @@ main()
 
     # Prompt user to check environment file before installing
     prompt_environment
+
+    # Setup pacman custom configuration
+    # [Comment this line if you prefer to use online repositories when installing your system]
+    setup_pacman_custom
 
     # Install and configure
     install_system

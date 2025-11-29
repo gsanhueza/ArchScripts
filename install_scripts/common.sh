@@ -15,11 +15,7 @@ ENV_PATH="${THIS_DIR}/env.sh"
 ### Installation options
 MOUNT_POINT="/mnt"
 CACHE_DIR="/root/pkg"
-PACMAN_PATH="${BASE_DIR}/pacman_custom.conf"
-
-# Use this for ONLINE installation
-#CACHE_DIR="${MOUNT_POINT}/var/cache/pacman/pkg"
-#PACMAN_PATH="/etc/pacman.conf"
+PACMAN_PATH="/etc/pacman.conf"
 
 ### Expose functions when sourcing this script file
 source $PRINTER_PATH
