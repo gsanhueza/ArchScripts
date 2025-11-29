@@ -6,13 +6,13 @@ Custom-built scripts for (mostly) non-interactive installation of Arch Linux.
 
 These script are originally intended to be part of the live ISO that you can build using [ArchISOMaker](https://www.github.com/gsanhueza/ArchISOMaker). In this repository, the `setup.sh` file is the main script what needs to be run to start the installation process.
 
-If you want to use these scripts by yourself (i.e. directly from your host system) without having to build an ISO file (for example, to install ArchLinux in a separate disk/pendrive, or to use it with [systemd-nspawn](https://wiki.archlinux.org/title/Systemd-nspawn)), I'd recommend you to:
+If you want to use these scripts by yourself (i.e. directly from your host system) without having to build an ISO file (for example, to install ArchLinux in a separate disk/USB drive, or to use it with [systemd-nspawn](https://wiki.archlinux.org/title/Systemd-nspawn)), I'd recommend you to:
 
 - Edit the `install_scripts/common.sh` file before running the main script, and modify the `CACHE_DIR` environment variable to match where you have your package cache in the host system (in ArchLinux, it's located in `/var/cache/pacman/pkg`).
 
 Using your currently available cache lets you avoid re-downloading packages that your cache might already have.
 
-- Edit the `setup.sh` file and comment the `setup_pacman_custom` function inside `main`, to guarantee you'll use the most updated packages instead of what you currently have in cache.
+- Edit the `setup.sh` file and comment the `setup_pacman_custom` function inside `main`, to use the configurations of your host system.
 
 If you don't comment the line, you'll end having to use non-existent `custom.db` database that [ArchISOMaker](https://www.github.com/gsanhueza/ArchISOMaker) generates, so you'll have to [manually create a database](https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#Custom_local_repository) with your cache packages.
 
