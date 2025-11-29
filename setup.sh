@@ -24,6 +24,8 @@ setup_pacman_custom() {
 }
 
 restore_original_pacman() {
+    [[ -e "${PACMAN_PATH}.bak" ]] || print_warning "No backup of original pacman configuration found." && return
+
     cp ${PACMAN_PATH} ${PACMAN_PATH}.old -v
     cp ${PACMAN_PATH}.bak ${PACMAN_PATH} -v
 
@@ -59,7 +61,7 @@ prompt_environment()
             exit 1
         ;;
         *)
-            $EDITOR $ENV_PATH
+            ${EDITOR:-vim} $ENV_PATH
             print_message "--------------------------------------------"
             print_message "Press ENTER to continue, or Ctrl+C to abort."
             print_message "--------------------------------------------"
