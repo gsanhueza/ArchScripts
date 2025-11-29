@@ -104,12 +104,16 @@ install_refind()
     # If EFI partition is mounted on `/efi` or `/boot/efi`, initrd is `initrd=/boot/initramfs-linux.img`
     (findmnt /efi || findmnt /boot/efi) &> /dev/null && BOOTPATH="/boot" || BOOTPATH=""
 
-    ## Uncomment these lines to prevent moving Microsoft's original bootloader.
-    ## Might be useful if you have an HP/MSI laptop (EFI implementation too rigid).
-    # mkdir -p /boot/EFI/refind
-    # cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
-
+    # Run the installer
     refind-install
+
+    # NOTE: If you have a system with a UEFI implementation that does not support
+    # non-default EFI folder locations (HP/MSI laptops, or USB drives in my experience),
+    # you may need to replace the line above with the following one:
+    ## Replace `/dev/sdXY` with the location of your ESP partition, e.g.: /dev/sda1
+    # refind-install --usedefault /dev/sdXY
+
+    # Configure rEFInd manually, because in chroot mode we cannot detect the UUID correctly.
     REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
     cat <<-EOF > /boot/refind_linux.conf
 "Boot using default options"     "root=${REFIND_UUID} rw add_efi_memmap initrd=${BOOTPATH}/initramfs-linux.img"
