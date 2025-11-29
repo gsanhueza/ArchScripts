@@ -6,19 +6,16 @@ BASE_DIR=$(readlink -f ${0%/*})
 source ${BASE_DIR}/install_scripts/install.sh
 
 setup_pacman_custom() {
-    cp ${PACMAN_PATH} ${PACMAN_TMP} -v
+    cat <<-EOF > ${PACMAN_TMP}
+[options]
+CacheDir = ${CACHE_DIR}
+Color
+CheckSpace
 
-    sed -i "s|^#CacheDir.*|CacheDir    = ${CACHE_DIR}|g" ${PACMAN_TMP}
-    sed -i "s|^#Color|Color|g" ${PACMAN_TMP}
-    sed -i "s|^DownloadUser|\#DownloadUser|g" ${PACMAN_TMP}
-
-    sed -i 's|^\[core\]|#&|g' ${PACMAN_TMP}
-    sed -i 's|^\[extra\]|#&|g' ${PACMAN_TMP}
-    sed -i 's|^Include|\#Include|g' ${PACMAN_TMP}
-
-    sed -i 's|^#\[custom\]|\[custom\]|g' ${PACMAN_TMP}
-    sed -i 's|^#SigLevel|SigLevel|g' ${PACMAN_TMP}
-    sed -i "s|^#Server = file:\/\/\/home\/custompkgs|Server = file:\/\/${CACHE_DIR}|g" ${PACMAN_TMP}
+[custom]
+SigLevel = Optional TrustAll
+Server = file://${CACHE_DIR}
+EOF
 
     print_message "Pacman custom configuration setup completed."
 }
