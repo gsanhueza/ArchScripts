@@ -109,16 +109,35 @@ install_refind()
 {
     # If EFI partition is mounted on `/boot`, initrd is `initrd=/initramfs-linux.img`
     # If EFI partition is mounted on `/efi` or `/boot/efi`, initrd is `initrd=/boot/initramfs-linux.img`
-    (findmnt /efi || findmnt /boot/efi) &> /dev/null && BOOTPATH="/boot" || BOOTPATH=""
+    if [[ $(findmnt /boot) ]]; then
+        BOOTPATH=""
+        BOOTPARTITION=$(findmnt -n -o SOURCE /boot)
+    elif [[ $(findmnt /efi) ]]; then
+        BOOTPATH="/boot"
+        BOOTPARTITION=$(findmnt -n -o SOURCE /efi)
+    elif [[ $(findmnt /boot/efi) ]]; then
+        BOOTPATH="/boot"
+        BOOTPARTITION=$(findmnt -n -o SOURCE /boot/efi)
+    else
+        print_failure ">>> No EFI partition found, aborting... <<<"
+        exit 1
+    fi
+
+    # If you have a system with a UEFI implementation that does not support
+    # non-default EFI folder locations (HP/MSI laptops, or USB drives in my experience),
+    # you may need to use "refind-fallback" instead of "refind" when selecting
+    # your bootloader in `env.sh`.
+
+    # Keep in mind that using the "refind-fallback" option does not write the entry in NVRAM,
+    # (which is good for USB drives, but not so good in your computer), so you might
+    # have to manually edit your boot options in the UEFI firmware options of your PC.
 
     # Run the installer
-    refind-install
-
-    # NOTE: If you have a system with a UEFI implementation that does not support
-    # non-default EFI folder locations (HP/MSI laptops, or USB drives in my experience),
-    # you may need to replace the line above with the following one:
-    ## Replace `/dev/sdXY` with the location of your ESP partition, e.g.: /dev/sda1
-    # refind-install --usedefault /dev/sdXY
+    if [[ "$BOOTLOADER" == "refind-fallback" ]]; then
+        refind-install --usedefault ${BOOTPARTITION}
+    else
+        refind-install
+    fi
 
     # Configure rEFInd manually, because in chroot mode we cannot detect the UUID correctly.
     REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
