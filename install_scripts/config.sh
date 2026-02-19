@@ -52,8 +52,11 @@ enable_display_manager()
     print_message ">>> Enabling display manager <<<"
 
     # Try enabling known display managers
-    systemctl list-unit-files sddm.service &>/dev/null && systemctl enable sddm.service && return
-    systemctl list-unit-files gdm.service &>/dev/null && systemctl enable gdm.service && return
+    display_managers=("plasmalogin" "sddm" "gdm")
+
+    for manager in "${display_managers[@]}"; do
+        systemctl list-unit-files ${manager}.service &>/dev/null && systemctl enable ${manager}.service && return
+    done
 
     # Failed to find a display manager
     print_warning ">>> Display manager not found, continuing... <<<"
