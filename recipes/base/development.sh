@@ -1,1 +1,1 @@
-RECIPE_PKGS="base-devel git"
+RECIPE_PKGS="base-devel git vim"
